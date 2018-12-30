@@ -1,0 +1,152 @@
+/* Global */
+
+body {
+	font-family: verdana, arial, sans-serif;
+	font-size: 11pt;
+	line-height: 1.5em;
+}
+
+#header {
+	text-align: center;
+	height: 5vh;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	background: "";
+	margin-bottom: 1vh;
+}
+
+#wrapper {
+	display: flex;
+	flex-direction: row;
+}
+
+#submit {
+	margin-left: 1%;
+}
+
+#auto-preview, #auto-preview-label {
+	font-size: 12px;
+	vertical-align: middle;
+}
+
+#bbcode {
+	width: 100%;
+}
+
+#bbcode-buttons {
+	margin: 1%;
+}
+
+#bbcode-buttons input[type=color] {
+	height: 17px;
+	vertical-align: middle;
+}
+
+#bbcode-buttons label {
+	font-size: 14px;
+	vertical-align: middle;
+}
+
+#bbcode-buttons .select-btn {
+	height: 14px;
+	padding: 0px 4px 1px 4px;
+	-ms-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+#bbcode-textarea {
+	width: 100%;
+	min-height: 80vh;
+	margin-left: 1%;
+	margin-right: 1%;
+}
+
+#html {
+	text-align: left;
+	margin-left: 1%;
+	margin-right: 1%;
+	width: 800px;
+	min-width: 800px;
+	max-height: 100%;
+	border: 1px solid #EBEBEB;
+	padding: 8px;
+}
+
+#html > #word-break {
+	display: block;
+	word-break: break-word;
+	word-wrap: break-word;
+	font-size: 11px;
+	line-height: 1.5em;
+	border-collapse: separate;
+	border-spacing: 2px;
+	font-family: Verdana,Arial;
+}
+
+#html > #word-break img {
+	max-width: 798px;
+	border: 0;
+	border-width: 0px;
+    border-style: initial;
+    border-color: initial;
+    border-image: initial;
+}
+
+#html > #word-break img.img-a-l {
+	float: left;
+    padding-right: 8px;
+    padding-top: 4px;
+}
+
+#html > #word-break img.img-a-r {
+	float: right;
+    padding-left: 8px;
+    padding-top: 4px;
+}
+
+#html > #word-break a, #html > #word-break a:visited {
+	color: #1d439b;
+    text-decoration: none;
+}
+
+#html > #word-break .codetext {
+	background-color: rgb(255, 255, 255);
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(235, 235, 235);
+    border-image: initial;
+    padding: 5px;
+}
+
+#html > #word-break .codetext pre {
+	margin: 0px;
+	white-space: pre-wrap;
+}
+
+#html > #word-break span {
+	line-height: 1.5em;
+    margin: 0px;
+    padding: 0px;
+}
+
+#html > #word-break iframe {
+	border-style: none;
+}
+
+#html > #word-break .quotetext {
+	background-color: rgb(255, 255, 255);
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(235, 235, 235);
+    border-image: initial;
+    padding: 5px;
+}

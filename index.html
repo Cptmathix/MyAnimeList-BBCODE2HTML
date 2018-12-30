@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>MyAnimeList - BBCODE2HTML</title>
+	<link rel="stylesheet" href="css/styles.css">
+	<script src="js/bbcode2html.js"></script>
+</head>
+<body class="page-common profile">
+	<div id="header">
+		<h1>MyAnimeList - BBCODE2HTML</h1>
+	</div>
+	
+	<div id="wrapper">
+		<div id="bbcode">
+			<div id="bbcode-buttons">
+				<div>
+					<input type="button" value="Bold">
+					<input type="button" value="Italic">
+					<input type="button" value="Strike">
+					<input type="button" value="Underline">
+					<input type="button" value="Center">
+					<input type="button" value="Right">
+					<label for="color">Color: </label><input type="color" name="color" id="color">
+					<label for="size">Size: </label><select name="size" id="size">
+						<option value="50">Small</option>
+						<option value="100" selected>Normal</option>
+						<option value="300">Medium</option>
+						<option value="600">Big</option>
+						<option value="900">Ultra Big</option>
+					</select><!--
+					--><input type="button" value="+" class="select-btn">
+				</div>
+				<div>
+					<input type="button" value="Code">
+					<input type="button" value="URL">
+					<input type="button" value="Spoiler">
+					<input type="button" value="IMG">
+					<input type="button" value="IMG Left">
+					<input type="button" value="IMG Right">
+					<input type="button" value="Youtube">
+					<input type="button" value="Quote">
+					<input type="button" value="List">
+					<input type="button" value="Ordered List">
+					<input type="button" value="List Item">
+				</div>
+			</div>
+			<textarea id="bbcode-textarea"></textarea>
+		</div>		
+		<div id="html">
+			<div id="word-break">Preview</div>
+		</div>
+	</div>
+
+	<div>
+		<button id="submit">Submit</button>
+		<input type="checkbox" name="auto-preview" id="auto-preview"><label for="auto-preview" id="auto-preview-label">Auto Preview</label>
+	</div>
+</body>
+</html>
