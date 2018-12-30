@@ -452,7 +452,8 @@ var XBBCODE = (function() {
         This function removes the metadata added by the updateTagDepths function
     */
     function unprocess(tagContent) {
-        return tagContent.replace(/<bbcl=[0-9]+ \/\*>/gi,"").replace(/<bbcl=[0-9]+ /gi,"&#91;").replace(/>/gi,"&#93;");
+        return tagContent.replace(/<bbcl=[0-9]+ \/\*>/gi,"").replace(/<bbcl=[0-9]+ /gi,"&#91;").replace(/>/gi,"&#93;")
+                         .replace(/ &#91;br&#93;&#91;\/br&#93; /g, "\n");
     }
 
     var replaceFunct = function(matchStr, bbcodeLevel, tagName, tagParams, tagContents) {
@@ -713,7 +714,7 @@ function createBBCODE(type, innerText = "") {
             break;
 
         case "url":
-            let url = prompt("Type URL", "");
+            let url = prompt("Insert URL", "");
 
             if (url == null) {
                 break;
@@ -725,7 +726,7 @@ function createBBCODE(type, innerText = "") {
             break;
         
         case "spoiler":
-            let spoiler = prompt("Type Spoiler name (optional)", "");
+            let spoiler = prompt("Insert Spoiler name (optional)", "");
 
             if (spoiler == null) {
                 break;
@@ -741,7 +742,7 @@ function createBBCODE(type, innerText = "") {
             tagClose = "[/img]";
 
             if (!innerText) {
-                let imgURL = prompt("Type Image URL", "");
+                let imgURL = prompt("Insert Image URL", "");
 
                 if (imgURL == null) {
                     break;
@@ -758,7 +759,7 @@ function createBBCODE(type, innerText = "") {
             tagClose = "[/img]";
 
             if (!innerText) {
-                let imgURLLeft = prompt("Type Image URL", "");
+                let imgURLLeft = prompt("Insert Image URL", "");
 
                 if (imgURLLeft == null) {
                     break;
@@ -775,7 +776,7 @@ function createBBCODE(type, innerText = "") {
             tagClose = "[/img]";
 
             if (!innerText) {
-                let imgURLRight = prompt("Type Image URL", "");
+                let imgURLRight = prompt("Insert Image URL", "");
 
                 if (imgURLRight == null) {
                     break;
@@ -800,7 +801,7 @@ function createBBCODE(type, innerText = "") {
             tagClose = "[/yt]";
 
             if (!innerText) {
-                let yt = prompt("Type youtube url", "");
+                let yt = prompt("Insert youtube url", "");
 
                 if (yt == null) {
                     break;
@@ -825,7 +826,7 @@ function createBBCODE(type, innerText = "") {
             break;
 
         case "quote":
-            let quote = prompt("Type quoted person name (optional)", "");
+            let quote = prompt("Insert quoted person name (optional)", "");
 
             if (quote == null) {
                 break;
