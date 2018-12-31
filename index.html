@@ -15,35 +15,57 @@
 		<div id="bbcode">
 			<div id="bbcode-buttons">
 				<div>
-					<input type="button" value="Bold">
-					<input type="button" value="Italic">
-					<input type="button" value="Strike">
-					<input type="button" value="Underline">
-					<input type="button" value="Center">
-					<input type="button" value="Right">
-					<label for="color">Color: </label><input type="color" name="color" id="color">
-					<label for="size">Size: </label><select name="size" id="size">
+					<input type="button" value="Bold" class="btn">
+					<input type="button" value="Italic" class="btn">
+					<input type="button" value="Strike" class="btn">
+					<input type="button" value="Underline" class="btn">
+					<input type="button" value="Center" class="btn">
+					<input type="button" value="Right" class="btn">
+				</div>
+				<div>
+					<input type="button" value="Code" class="btn">
+					<input type="button" value="URL" class="btn">
+					<input type="button" value="Spoiler" class="btn">
+					<input type="button" value="IMG" class="btn">
+					<input type="button" value="IMG Left" class="btn">
+					<input type="button" value="IMG Right" class="btn">
+					<input type="button" value="Youtube" class="btn">
+					<input type="button" value="Quote" class="btn">
+					<input type="button" value="List" class="btn">
+					<input type="button" value="Ordered List" class="btn">
+					<input type="button" value="List Item" class="btn">
+				</div>
+				<div>
+					<label for="color">Color: </label>
+					<input type="text" name="color" id="color"><!--
+					--><input type="button" value="+" class="select-btn" id="colorSubmit">
+					<select name="colorSelection" id="colorSelection">
+						<option value="grey">Grey</option>
+						<option value="blue">Blue</option>
+						<option value="red">Red</option>
+						<option value="green">Green</option>
+						<option value="yellow">Yellow</option>
+						<option value="pink">Pink</option>
+						<option value="navy">Navy</option>
+						<option value="white">White</option>
+						<option value="black" selected>Black</option>
+						<option value="orange">Orange</option>
+						<option value="purple">Purple</option>
+					</select>					
+					<input type="color" name="colorWheel" id="colorWheel">
+
+					<label for="size">Size: </label>
+					<input type="number" name="size" id="size"><!--
+					--><input type="button" value="+" class="select-btn" id="sizeSubmit">
+					<select name="sizeSelection" id="sizeSelection">
 						<option value="50">Small</option>
 						<option value="100" selected>Normal</option>
 						<option value="300">Medium</option>
 						<option value="600">Big</option>
 						<option value="900">Ultra Big</option>
-					</select><!--
-					--><input type="button" value="+" class="select-btn">
+					</select>
 				</div>
-				<div>
-					<input type="button" value="Code">
-					<input type="button" value="URL">
-					<input type="button" value="Spoiler">
-					<input type="button" value="IMG">
-					<input type="button" value="IMG Left">
-					<input type="button" value="IMG Right">
-					<input type="button" value="Youtube">
-					<input type="button" value="Quote">
-					<input type="button" value="List">
-					<input type="button" value="Ordered List">
-					<input type="button" value="List Item">
-				</div>
+				
 			</div>
 			<textarea id="bbcode-textarea"></textarea>
 		</div>		

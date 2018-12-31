@@ -605,6 +605,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 function init() {
+    // textarea listener
     document.getElementById("bbcode").addEventListener("input", function() {
         let autoPreview = document.getElementById("auto-preview").checked;
 
@@ -612,10 +613,12 @@ function init() {
             loadParser();
         }
     });
+
+    // submit button listener
     document.getElementById("submit").addEventListener("click", loadParser);
     
-    let buttons = document.querySelectorAll("#bbcode-buttons input[type=button]");
-
+    // bbcode buttons listeners
+    let buttons = document.querySelectorAll("#bbcode-buttons input.btn");
     for (let button of buttons) {
         button.addEventListener("click", function(event) {
             event.preventDefault();
@@ -623,8 +626,29 @@ function init() {
         });
     }
 
-    document.getElementById("color").addEventListener("change", function() {
-        insertBBCODE("Color");
+    // size selection listener
+    document.getElementById("sizeSelection").addEventListener("change", function(event) {
+        document.getElementById("size").value = event.target.value;
+    });
+
+    // size sumbit listener
+    document.getElementById("sizeSubmit").addEventListener("click",  function(){
+        insertBBCODE("size");
+    });
+
+    // color selection listener
+    document.getElementById("colorSelection").addEventListener("change", function(event) {
+        document.getElementById("color").value = event.target.value;
+    });
+
+    // color wheel listener
+    document.getElementById("colorWheel").addEventListener("change", function() {
+        document.getElementById("color").value = event.target.value;
+    });
+
+    // color sumbit listener
+    document.getElementById("colorSubmit").addEventListener("click",  function(){
+        insertBBCODE("color");
     });
 }
 
@@ -654,10 +678,10 @@ function insertBBCODE(type) {
     let [tagOpen, innerText, tagClosed, selectionPos] = createBBCODE(type, selection);
 
     if (tagOpen.length > 0) {
-        textArea.value = textArea.value.substring(0, start) + tagOpen + innerText + tagClosed + textArea.value.substring(end, textArea.value.length);
+        textArea.focus();
+        document.execCommand("insertText", false, tagOpen + innerText + tagClosed);
         textArea.selectionStart = start + selectionPos;
         textArea.selectionEnd = end + selectionPos;
-        textArea.focus();
         
         let autoPreview = document.getElementById("auto-preview").checked;
 
@@ -788,7 +812,7 @@ function createBBCODE(type, innerText = "") {
 
             break;
 
-        case "+": // size
+        case "size":
             let txtSize = document.getElementById("size").value;
 
             tagOpen = "[size=" + String(txtSize) + "]";
@@ -838,19 +862,19 @@ function createBBCODE(type, innerText = "") {
             break;
 
         case "list":
-            tagOpen = "[list][*]";
-            tagClose = "[/list]";
+            tagOpen = "[list]\n[*]";
+            tagClose = "\n[/list]";
 
             break;
 
         case "ordered list":
-            tagOpen = "[list=1][*]";
-            tagClose = "[/list]";
+            tagOpen = "[list=1]\n[*]";
+            tagClose = "\n[/list]";
 
             break;
 
         case "list item":
-            tagOpen = "[*]";
+            tagOpen = "\n[*]";
             tagClose = "";
 
             break;
