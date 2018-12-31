@@ -762,53 +762,44 @@ function createBBCODE(type, innerText = "") {
             break;
 
         case "img":
+            let imgURL = prompt("Insert Image URL", "");
+
+            if (imgURL == null) {
+                break;
+            }
+
+            innerText = imgURL;
             tagOpen = "[img]";
             tagClose = "[/img]";
-
-            if (!innerText) {
-                let imgURL = prompt("Insert Image URL", "");
-
-                if (imgURL == null) {
-                    break;
-                }
-
-                innerText = imgURL;
-                selectionPos = imgURL.length + tagClose.length;
-            }
+            selectionPos = innerText.length + tagClose.length;
 
             break;
 
         case "img left":
+            let imgURLLeft = prompt("Insert Image URL", "");
+
+            if (imgURLLeft == null) {
+                break;
+            }
+
+            innerText = imgURLLeft;            
             tagOpen = "[img align=left]";
             tagClose = "[/img]";
-
-            if (!innerText) {
-                let imgURLLeft = prompt("Insert Image URL", "");
-
-                if (imgURLLeft == null) {
-                    break;
-                }
-
-                innerText = imgURLLeft;
-                selectionPos = imgURLLeft.length + tagClose.length;
-            }
+            selectionPos = innerText.length + tagClose.length;
 
             break;
 
         case "img right":
+            let imgURLRight = prompt("Insert Image URL", "");
+
+            if (imgURLRight == null) {
+                break;
+            }
+
+            innerText = imgURLRight;
             tagOpen = "[img align=right]";
             tagClose = "[/img]";
-
-            if (!innerText) {
-                let imgURLRight = prompt("Insert Image URL", "");
-
-                if (imgURLRight == null) {
-                    break;
-                }
-
-                innerText = imgURLRight;
-                selectionPos = imgURLRight.length + tagClose.length;
-            }
+            selectionPos = innerText.length + tagClose.length;
 
             break;
 
@@ -821,19 +812,16 @@ function createBBCODE(type, innerText = "") {
             break;
 
         case "youtube":
+            let yt = prompt("Insert youtube video url", "");
+
+            if (yt == null) {
+                break;
+            }
+
+            innerText = getVideoInfoFromUrl(yt, "v") || yt;
             tagOpen = "[yt]";
             tagClose = "[/yt]";
-
-            if (!innerText) {
-                let yt = prompt("Insert youtube url", "");
-
-                if (yt == null) {
-                    break;
-                }
-
-                innerText = getVideoInfoFromUrl(yt, "v") || yt;
-                selectionPos = innerText.length + tagClose.length;
-            }
+            selectionPos = innerText.length + tagClose.length;
 
             break;
 
