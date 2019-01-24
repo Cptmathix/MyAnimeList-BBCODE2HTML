@@ -299,7 +299,7 @@ var XBBCODE = (function() {
         },
 		"yt": {			
 			openTag: function(params,content) {
-                return '<iframe width="420" height="345" src="https://www.youtube.com/embed/' + content + '"/>';
+                return '<iframe width="425" height="355" frameborder="0" src="https://www.youtube.com/embed/' + content + '"/>';
             },
             closeTag: function(params,content) {
                 return '</iframe>';
