@@ -1,6 +1,5 @@
 body {
 	font-family: verdana, arial, sans-serif;
-	font-size: 11pt;
 	line-height: 1.5em;
 }
 
@@ -80,46 +79,45 @@ select, input, label {
 	max-height: 100%;
 	border: 1px solid #EBEBEB;
 	padding: 8px;
+	line-height: normal;
 }
 
-#html > #word-break {
+#html-cell > #word-break {
 	display: block;
 	word-break: break-word;
 	word-wrap: break-word;
 	font-size: 11px;
-	line-height: 1.5em;
 	border-collapse: separate;
-	border-spacing: 2px;
 	font-family: Verdana,Arial;
 }
 
-#html > #word-break img {
+#html-cell > #word-break img {
 	max-width: 798px;
 	border: 0;
 	border-width: 0px;
     border-style: initial;
     border-color: initial;
-    border-image: initial;
+	border-image: initial;
 }
 
-#html > #word-break img.img-a-l {
+#html-cell > #word-break img.img-a-l {
 	float: left;
     padding-right: 8px;
     padding-top: 4px;
 }
 
-#html > #word-break img.img-a-r {
+#html-cell > #word-break img.img-a-r {
 	float: right;
     padding-left: 8px;
     padding-top: 4px;
 }
 
-#html > #word-break a, #html > #word-break a:visited {
+#html-cell > #word-break a, #html-cell > #word-break a:visited {
 	color: #1d439b;
     text-decoration: none;
 }
 
-#html > #word-break .codetext {
+#html-cell > #word-break .codetext {
 	background-color: rgb(255, 255, 255);
     margin-bottom: 5px;
     margin-left: 10px;
@@ -131,22 +129,22 @@ select, input, label {
     padding: 5px;
 }
 
-#html > #word-break .codetext pre {
+#html-cell > #word-break .codetext pre {
 	margin: 0px;
 	white-space: pre-wrap;
 }
 
-#html > #word-break span {
+#html-cell > #word-break span {
 	line-height: 1.5em;
     margin: 0px;
     padding: 0px;
 }
 
-#html > #word-break iframe {
+#html-cell > #word-break iframe {
 	border-style: none;
 }
 
-#html > #word-break .quotetext {
+#html-cell > #word-break .quotetext {
 	background-color: rgb(255, 255, 255);
     margin-bottom: 5px;
     margin-left: 10px;

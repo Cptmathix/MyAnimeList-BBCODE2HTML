@@ -451,7 +451,7 @@ var XBBCODE = (function() {
     */
     function unprocess(tagContent) {
         return tagContent.replace(/<bbcl=[0-9]+ \/\*>/gi,"").replace(/<bbcl=[0-9]+ /gi,"&#91;").replace(/>/gi,"&#93;")
-                         .replace(/ &#91;br&#93;&#91;\/br&#93; /g, "\n");
+                         .replace(/&#91;br&#93;&#91;\/br&#93;/g, "\n");
     }
 
     var replaceFunct = function(matchStr, bbcodeLevel, tagName, tagParams, tagContents) {
@@ -654,8 +654,8 @@ function loadParser() {
     let html = document.getElementById("word-break");
     html.parentNode.removeChild(html);
     
-    let result = runParser(document.getElementById("bbcode-textarea").value.replace(/(?:\r\n|\r|\n)/g, ' [br][/br] '));
-    document.getElementById("html").insertAdjacentHTML('afterbegin', result.html);
+    let result = runParser(document.getElementById("bbcode-textarea").value.replace(/(?:\r\n|\r|\n)/g, '[br][/br]'));
+    document.getElementById("html-cell").insertAdjacentHTML('afterbegin', result.html);
 }
 
 function runParser(content) {
