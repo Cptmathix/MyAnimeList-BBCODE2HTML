@@ -105,6 +105,10 @@ body {
 	border: 0;
 }
 
+#bbcode-buttons #removeNewLines:hover {
+	background: #394250;
+}
+
 #bbcode-textarea {
 	width: 99%;
 	min-height: 82vh;
