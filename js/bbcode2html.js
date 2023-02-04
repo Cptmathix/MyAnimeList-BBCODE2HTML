@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 // below a slightly modified version of Patrick Gillespie's BBCode Parser to make it work like the bbcode on myanimelist, thank you for making this available
 
 /*
@@ -31,15 +32,15 @@ THE SOFTWARE.
     to add in your own tags.
 */
 
-var XBBCODE = (function() {
+let XBBCODE = (function() {
     "use strict";
 
     // -----------------------------------------------------------------------------
     // Set up private variables
     // -----------------------------------------------------------------------------
 
-    var me = {},
-        urlPattern = /^(?:https?|file|c):(?:\/{1,3}|\\{1})[-a-zA-Z0-9:;@#%&()~_?\+=\/\\\.]*$/,
+    let me = {},
+        urlPattern = /^(?:https?|file|c):(?:\/{1,3}|\\{1})[-a-zA-Z0-9:;,@#%&()~_?+=/\\.]*$/,
         colorNamePattern = /^(?:aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen)$/,
         colorCodePattern = /^#?[a-fA-F0-9]{6}$/,
         tags,
@@ -83,7 +84,7 @@ var XBBCODE = (function() {
      *
      *
      *
-     * LIMITIONS on adding NEW TAGS:
+     * LIMITATIONS on adding NEW TAGS:
      *  - Tag names should be alphanumeric (including underscores) and all tags should have an opening tag
      *    and a closing tag.
      *    The [*] tag is an exception because it was already a standard
@@ -94,46 +95,25 @@ var XBBCODE = (function() {
 
     tags = {
         "b": {
-            openTag: function(params, content) {
-                return '<b>';
-            },
-            closeTag: function(params, content) {
-                return '</b>';
-            }
+            openTag: () => '<b>',
+            closeTag: () => '</b>'
         },
         "br": {
-            openTag: function(params, content) {
-                return '<br>';
-            },
-            closeTag: function(params, content) {
-                return '';
-            }
+            openTag: () => '<br>'
         },
         "center": {
-            openTag: function(params, content) {
-                return '<div style="text-align: center;">';
-            },
-            closeTag: function(params, content) {
-                return '</div>';
-            }
+            openTag: () => '<div style="text-align: center;">',
+            closeTag: () => '</div>'
         },
-
         "code": {
-            openTag: function(params, content) {
-                return '<div class="codetext"><pre>';
-            },
-            closeTag: function(params, content) {
-                return '</pre></div>';
-            },
+            openTag: () => '<div class="codetext"><pre>',
+            closeTag: () => '</pre></div>',
             noParse: true
         },
         "color": {
-            openTag: function(params, content) {
-                params = params || '';
+            openTag: (params) => {
+                let colorCode = params.get('color') || "black";
 
-                var colorCode = (params.substr(1)).toLowerCase() || "black";
-                colorNamePattern.lastIndex = 0;
-                colorCodePattern.lastIndex = 0;
                 if (!colorNamePattern.test(colorCode)) {
                     if (!colorCodePattern.test(colorCode)) {
                         colorCode = "black";
@@ -143,167 +123,188 @@ var XBBCODE = (function() {
                         }
                     }
                 }
+
                 return '<span style="color:' + colorCode + '">';
             },
-            closeTag: function(params, content) {
-                return '</span>';
-            }
+            closeTag: () => '</span>'
+        },
+        "font": {
+            openTag: (params) => {
+                let font = params.get('font')?.replace(/'/g, "") || "inherit";
+                return '<span style="font-family:' + font + ';">';
+            },
+            closeTag: () => '</span>'
+        },
+        "hr": {
+            openTag: () => '<hr>',
+            singleTag: true
         },
         "i": {
-            openTag: function(params, content) {
-                return '<i>';
-            },
-            closeTag: function(params, content) {
-                return '</i>';
-            }
+            openTag: () => '<i>',
+            closeTag: () => '</i>'
         },
         "img": {
-            openTag: function(params, content) {
-                params = params || '';
+            openTag: (params, content) => {
+                let align = params.get('align');
+                let alt = params.get('alt');
+                let title = params.get('title');
+                let width = params.get('width');
+                let height = params.get('height');
+                let widthxheight = params.get('img'); // [img=widthxheight]
 
-                var align = (params.substr(1)).toLowerCase() || "";
-                if (align == "align=left") {
-                    align = "img-a-l";
-                } else if (align == "align=right") {
-                    align = "img-a-r";
-                } else {
-                    align = "";
+                let classNames = "userimg"
+                if (align == "left") {
+                    classNames += " img-a-l";
+                } else if (align == "right") {
+                    classNames += " img-a-r";
                 }
 
-                var myUrl = content;
+                let altAttr = alt ? `alt="${alt}"` : "";
+                let titleAttr = title ? `title="${title}"` : "";
 
-                urlPattern.lastIndex = 0;
-                if (!urlPattern.test(myUrl)) {
-                    myUrl = "";
+                if (widthxheight && /^\d+x\d+$/.test(widthxheight)) {
+                    let [w, h] = widthxheight.split("x");
+                    width = width || w;
+                    height = height || h;
                 }
 
-                return '<img class="userimg ' + align + '" src="' + myUrl + '" />';
-            },
-            closeTag: function(params, content) {
-                return '';
+                width = width ? width + "px" : "auto";
+                height = height ? height + "px" : "auto";
+                let styleAttr = `style="width:${width};height:${height};"`;
+
+                let attributes = [altAttr, titleAttr, styleAttr].filter(Boolean).join(" ");
+
+                let url = content;
+                if (!urlPattern.test(url)) {
+                    url = "";
+                }
+
+                return '<img class="' + classNames + '" src="' + url + '" ' + attributes + '>';
             },
             displayContent: false
         },
+        "justify": {
+            openTag: () => '<div style="text-align: justify;">',
+            closeTag: () => '</div>'
+        },
         "list": {
-            openTag: function(params, content) {
-                params = params || '';
+            openTag: (params) => {
+                let type = parseInt(params.get('list')) || 0;
 
-                var type = (params.substr(1)).toLowerCase() || "";
-
-                if (type == 1) {
+                if (type === 1) {
                     return '<ol>';
                 } else {
                     return '<ul>';
                 }
             },
-            closeTag: function(params, content) {
-                params = params || '';
+            closeTag: (params) => {
+                let type = parseInt(params.get('list')) || 0;
 
-                var type = (params.substr(1)).toLowerCase() || "";
-
-                if (type == 1) {
+                if (type === 1) {
                     return '</ol>';
                 } else {
                     return '</ul>';
                 }
             },
-            restrictChildrenTo: ["*", "li"]
+            restrictChildrenTo: ["*", "br"]
+        },
+        "pre": {
+            openTag: () => '<pre>',
+            closeTag: () => '</pre>',
+            noParse: true
         },
         "quote": {
-            openTag: function(params, content) {
-                params = params || '';
+            openTag: (params) => {
+                let user = params.get('quote');
+                let messageId = params.get('message')
 
-                var user = (params.substr(1).toLowerCase() || "");
-
-                if (user) {
-                    return '<div class="quotetext"><strong>' + user + ' said:</strong><br>';
+                if (user && messageId) {
+                    return '<div class="quotetext" data-id="' + messageId + '" data-user="' + user + '"><strong><a href="https://myanimelist.net/forum/message/' + messageId + '?goto=topic">' + user + ' said:</a></strong><br>'
+                } else if (user) {
+                    return '<div class="quotetext" data-user="' + user + '"><strong>' + user + ' said:</strong><br>';
                 } else {
                     return '<div class="quotetext">';
                 }
             },
-            closeTag: function(params, content) {
-                return '</div>';
-            }
+            closeTag: () => '</div>'
         },
         "right": {
-            openTag: function(params, content) {
-                return '<div style="text-align: right;">';
-            },
-            closeTag: function(params, content) {
-                return '</div>';
-            }
+            openTag: () => '<div style="text-align: right;">',
+            closeTag: () => '</div>'
         },
         "s": {
-            openTag: function(params, content) {
-                return '<span style="text-decoration:line-through;">';
-            },
-            closeTag: function(params, content) {
-                return '</span>';
-            }
+            openTag: () => '<span style="text-decoration:line-through;">',
+            closeTag: () => '</span>'
         },
         "size": {
-            openTag: function(params, content) {
-                params = params || '';
-
-                var mySize = parseInt(params.substr(1), 10) || 0;
-
-                return '<span style="font-size:' + mySize + '%;">';
+            openTag: (params) => {
+                let size = params.get('size');
+                return '<span style="font-size:' + size + '%;">';
             },
-            closeTag: function(params, content) {
-                return '</span>';
-            }
+            closeTag: () => '</span>'
         },
         "spoiler": {
-            openTag: function(params, content) {
-                var title = "spoiler";
+            openTag: (params) => {
+                let title = params.get('spoiler')?.replace("\"", "") || "spoiler";
 
-                if (params) {
-                    title = params.substr(1).replace("\"", "");
-                }
-
-                return '<div class="spoiler"><input type="button" class="button show_button" onclick="this.nextSibling.style.display=\'inline-block\';this.style.display=\'none\';" data-showname="Show ' + title + '" data-hidename="Hide ' + title + '" value="Show ' + title + '"><span class="spoiler_content" style="display:none"><input type="button" class="button hide_button" onclick="this.parentNode.style.display=\'none\';this.parentNode.parentNode.childNodes[0].style.display=\'inline-block\';" value="Hide ' + title + '"><br>';
+                return '<div class="spoiler"><input type="button" class="button show_button" onclick="this.nextSibling.style.display=\'inline-block\';this.style.display=\'none\';" data-showname="Show ' + title + '" data-hidename="Hide ' + title + '" value="Show ' + title + '"><span class="spoiler_content" style="display:none"><input type="button" class="button hide_button" onclick="this.parentNode.style.display=\'none\';this.parentNode.parentNode.childNodes&#91;0&#93;.style.display=\'inline-block\';" value="Hide ' + title + '"><br>';
             },
-            closeTag: function(params, content) {
-                return '</span></div>';
-            }
+            closeTag: () => '</span></div>'
+        },
+        "sub": {
+            openTag: () => '<sub>',
+            closeTag: () => '</sub>'
+        },
+        "sup": {
+            openTag: () => '<sup>',
+            closeTag: () => '</sup>'
+        },
+        "table": {
+            openTag: () => '<table class="bbcode-table"><tbody>',
+            closeTag: () => '</tbody></table>',
+            restrictChildrenTo: ["tr","br"]
+        },
+        "td": {
+            openTag: () => '<td>',
+            closeTag: () => '</td>',
+            restrictParentsTo: ["tr"]
+        },
+        "th": {
+            openTag: () => '<th>',
+            closeTag: () => '</th>',
+            restrictParentsTo: ["tr"]
+        },
+        "tr": {
+            openTag: () => '<tr>',
+            closeTag: () => '</tr>',
+            restrictChildrenTo: ["td","th","br"],
+            restrictParentsTo: ["table"]
         },
         "u": {
-            openTag: function(params, content) {
-                return '<u>';
-            },
-            closeTag: function(params, content) {
-                return '</u>';
-            }
+            openTag: () => '<u>',
+            closeTag: () => '</u>'
         },
         "url": {
-            openTag: function(params, content) {
+            openTag: (params, content) => {
+                let url;
 
-                var myUrl;
-
-                if (!params) {
-                    myUrl = content.replace(/<.*?>/g, "");
+                if (!params.get('url')) {
+                    url = content.replace(/<.*?>/g, "");
                 } else {
-                    myUrl = params.substr(1);
+                    url = params.get('url');
                 }
 
-                urlPattern.lastIndex = 0;
-                if (!urlPattern.test(myUrl)) {
-                    myUrl = "#";
+                if (!urlPattern.test(url)) {
+                    url = "#";
                 }
 
-                return '<a href="' + myUrl + '" rel="nofollow">';
+                return '<a href="' + url + '" target="_blank" rel="nofollow noopener noreferrer">';
             },
-            closeTag: function(params, content) {
-                return '</a>';
-            }
+            closeTag: () => '</a>'
         },
         "yt": {
-            openTag: function(params, content) {
-                return '<iframe width="425" height="355" frameborder="0" src="https://www.youtube.com/embed/' + content + '"/>';
-            },
-            closeTag: function(params, content) {
-                return '</iframe>';
-            },
+            openTag: (_, content) => '<iframe width="425" height="355" frameborder="0" src="https://www.youtube.com/embed/' + content + '?rel=1"/>',
+            closeTag: () => '</iframe>',
             displayContent: false
         },
         /*
@@ -312,24 +313,20 @@ var XBBCODE = (function() {
             add will act like this and this tag is an exception to the others.
         */
         "*": {
-            openTag: function(params, content) {
-                return "<li>";
-            },
-            closeTag: function(params, content) {
-                return "</li>";
-            },
-            restrictParentsTo: ["list", "ul", "ol"]
+            openTag: () => "<li>",
+            closeTag: () => "</li>",
+            restrictParentsTo: ["list"]
         }
     };
 
     // create tag list and lookup fields
     function initTags() {
         tagList = [];
-        var prop,
+        let prop,
             ii,
             len;
         for (prop in tags) {
-            if (tags.hasOwnProperty(prop)) {
+            if (Object.prototype.hasOwnProperty.call(tags, prop)) {
                 if (prop === "*") {
                     tagList.push("\\" + prop);
                 } else {
@@ -361,7 +358,7 @@ var XBBCODE = (function() {
 
         // create the regex for escaping ['s that aren't apart of tags
         (function() {
-            var closeTagList = [];
+            let closeTagList = [];
             for (var ii = 0; ii < tagList.length; ii++) {
                 if (tagList[ii] !== "\\*") { // the * tag doesn't have an offical closing tag
                     closeTagList.push("/" + tagList[ii]);
@@ -371,7 +368,6 @@ var XBBCODE = (function() {
             openTags = new RegExp("(\\[)((?:" + tagList.join("|") + ")(?:[ =][^\\]]*?)?)(\\])", "gi");
             closeTags = new RegExp("(\\[)(" + closeTagList.join("|") + ")(\\])", "gi");
         })();
-
     }
     initTags();
 
@@ -379,13 +375,13 @@ var XBBCODE = (function() {
     // private functions
     // -----------------------------------------------------------------------------
 
-    function checkParentChildRestrictions(parentTag, bbcode, bbcodeLevel, tagName, tagParams, tagContents, errQueue) {
+    function checkParentChildRestrictions(parentTag, _bbcode, bbcodeLevel, _tagName, _tagParams, tagContents, errQueue) {
 
         errQueue = errQueue || [];
         bbcodeLevel++;
 
         // get a list of all of the child tags to this tag
-        var reTagNames = new RegExp("(<bbcl=" + bbcodeLevel + " )(" + tagList.join("|") + ")([ =>])", "gi"),
+        let reTagNames = new RegExp("(<bbcl=" + bbcodeLevel + " )(" + tagList.join("|") + ")([ =>])", "gi"),
             reTagNamesParts = new RegExp("(<bbcl=" + bbcodeLevel + " )(" + tagList.join("|") + ")([ =>])", "i"),
             matchingTags = tagContents.match(reTagNames) || [],
             cInfo,
@@ -417,7 +413,6 @@ var XBBCODE = (function() {
                     errQueue.push(errStr);
                 }
             }
-
         }
 
         tagContents = tagContents.replace(bbRegExp, function(matchStr, bbcodeLevel, tagName, tagParams, tagContents) {
@@ -433,8 +428,8 @@ var XBBCODE = (function() {
         from the HTML code tags at the end of the processing.
     */
     function updateTagDepths(tagContents) {
-        tagContents = tagContents.replace(/\<([^\>][^\>]*?)\>/gi, function(matchStr, subMatchStr) {
-            var bbCodeLevel = subMatchStr.match(/^bbcl=([0-9]+) /);
+        tagContents = tagContents.replace(/<([^>][^>]*?)>/gi, function(matchStr, subMatchStr) {
+            let bbCodeLevel = subMatchStr.match(/^bbcl=([0-9]+) /);
             if (bbCodeLevel === null) {
                 return "<bbcl=0 " + subMatchStr + ">";
             } else {
@@ -450,19 +445,48 @@ var XBBCODE = (function() {
         This function removes the metadata added by the updateTagDepths function
     */
     function unprocess(tagContent) {
-        return tagContent.replace(/<bbcl=[0-9]+ \/\*>/gi, "").replace(/<bbcl=[0-9]+ /gi, "&#91;").replace(/>/gi, "&#93;")
-            .replace(/&#91;br&#93;&#91;\/br&#93;/g, "\n");
+        return tagContent.replace(/<bbcl=[0-9]+ \/\*>/gi, "").replace(/<bbcl=[0-9]+ /gi, "&#91;").replace(/>/gi, "&#93;");
     }
 
-    var replaceFunct = function(matchStr, bbcodeLevel, tagName, tagParams, tagContents) {
+    function parseParameters(tagName, tagParams) {
+        let result = new Map();
 
+        if (!tagParams) { return result }
+
+        tagParams = tagParams.replaceAll('&#39;', '"');
+        tagParams = tagParams.replaceAll('&quot;', '"');
+        let paramList = tagParams.trim().match(/((?:[^\s"]+|"[^"]*")+)/g);
+
+        for (var param of paramList) {
+            let [key, ...value] = param.split("=");
+
+            key = key?.toLowerCase() || tagName;
+            value = value.join('=').replace(/^"+|"+$/g, '');
+
+            if (value.includes('"')) {
+                return null;
+            }
+
+            result.set(key, value);
+        }
+
+        return result;
+    }
+
+    let replaceFunc = (matchStr, _bbcodeLevel, tagName, tagParams, tagContents) => {
         tagName = tagName.toLowerCase();
 
-        var processedContent = tags[tagName].noParse ? unprocess(tagContents) : tagContents.replace(bbRegExp, replaceFunct),
-            openTag = tags[tagName].openTag(tagParams, processedContent),
-            closeTag = tags[tagName].closeTag(tagParams, processedContent);
+        let parsedParameters = parseParameters(tagName, tagParams);
+        if (parsedParameters === null) {
+            return unprocess(matchStr)
+        }
 
-        if (tags[tagName].displayContent === false) {
+        let tag = tags[tagName];
+        let processedContent = tag.noParse ? unprocess(tagContents) : tagContents.replace(bbRegExp, replaceFunc);
+        let openTag = (tag.openTag) ? tag.openTag(parsedParameters, processedContent) : "";
+        let closeTag = (tag.closeTag) ? tag.closeTag(parsedParameters, processedContent) : "";
+
+        if (tag.displayContent === false) {
             processedContent = "";
         }
 
@@ -470,15 +494,24 @@ var XBBCODE = (function() {
     };
 
     function parse(config) {
-        var output = config.text;
-        output = output.replace(bbRegExp, replaceFunct);
+        let output = config.text;
+        output = output.replace(bbRegExp, replaceFunc);
         return output;
+    }
+
+    function parseSingleTags(text) {
+        for(var tag in tags) {
+            if(tags[tag].singleTag) {
+                text = text.replaceAll(`[${tag}]`, tags[tag].openTag());
+            }
+        }
+        return text;
     }
 
     /*
         The star tag [*] is special in that it does not use a closing tag. Since this parser requires that tags to have a closing
         tag, we must pre-process the input and add in closing tags [/*] for the star tag.
-        We have a little levaridge in that we know the text we're processing wont contain the <> characters (they have been
+        We have a little leverage in that we know the text we're processing wont contain the <> characters (they have been
         changed into their HTML entity form to prevent XSS and code injection), so we can use those characters as markers to
         help us define boundaries and figure out where to place the [/*] tags.
     */
@@ -486,32 +519,40 @@ var XBBCODE = (function() {
         text = text.replace(/\[(?!\*[ =\]]|list([ =][^\]]*)?\]|\/list[\]])/ig, "<");
         text = text.replace(/\[(?=list([ =][^\]]*)?\]|\/list[\]])/ig, ">");
 
-        while (text !== (text = text.replace(/>list([ =][^\]]*)?\]([^>]*?)(>\/list])/gi, function(matchStr, contents, endTag) {
-                var innerListTxt = matchStr;
-                while (innerListTxt !== (innerListTxt = innerListTxt.replace(/\[\*\]([^\[]*?)(\[\*\]|>\/list])/i, function(matchStr, contents, endTag) {
-                        if (endTag.toLowerCase() === ">/list]") {
-                            endTag = "</*]</list]";
-                        } else {
-                            endTag = "</*][*]";
-                        }
-                        return "<*]" + contents + endTag;
-                    })));
+        while (text !== (text = text.replace(/>list([ =][^\]]*)?\]([^>]*?)(>\/list])/gi, (matchStr) => {
+            let innerListTxt = matchStr;
 
-                innerListTxt = innerListTxt.replace(/>/g, "<");
-                return innerListTxt;
+            while (innerListTxt !== (innerListTxt = innerListTxt.replace(/\[\*\]([^[]*?)(\[\*\]|>\/list])/i, (_matchStr, contents, endTag) => {
+                if (endTag.toLowerCase() === ">/list]") {
+                    endTag = "</*]</list]";
+                } else {
+                    endTag = "</*][*]";
+                }
+                return "<*]" + contents + endTag;
             })));
+
+            innerListTxt = innerListTxt.replace(/>/g, "<");
+            return innerListTxt;
+        })));
 
         // add ['s for our tags back in
         text = text.replace(/</g, "[");
         return text;
     }
 
+    function securityFixes(text) {
+        return text
+            .replaceAll(';', '&#59;')
+            .replaceAll("'", '&#39;')
+            .replaceAll('"', '&quot;');
+    }
+
     function addBbcodeLevels(text) {
-        while (text !== (text = text.replace(pbbRegExp, function(matchStr, tagName, tagParams, tagContents) {
-                matchStr = matchStr.replace(/\[/g, "<");
-                matchStr = matchStr.replace(/\]/g, ">");
-                return updateTagDepths(matchStr);
-            })));
+        while (text !== (text = text.replace(pbbRegExp, function(matchStr) {
+            matchStr = matchStr.replace(/\[/g, "<");
+            matchStr = matchStr.replace(/\]/g, ">");
+            return updateTagDepths(matchStr);
+        })));
         return text;
     }
 
@@ -526,7 +567,7 @@ var XBBCODE = (function() {
 
     // API
     me.addTags = function(newtags) {
-        var tag;
+        let tag;
         for (tag in newtags) {
             tags[tag] = newtags[tag];
         }
@@ -534,32 +575,42 @@ var XBBCODE = (function() {
     };
 
     me.process = function(config) {
-        var ret = { html: "", error: false },
+        let ret = { html: "", error: false },
             errQueue = [];
+
+        config.text = securityFixes(config.text);
+
+        if (config.convertLineBreaksToBbcode) {
+            config.text = config.text.replace(/(?:\r\n|\r|\n)/g, '[br][/br]\n')
+        }
 
         config.text = config.text.replace(/</g, "&lt;"); // escape HTML tag brackets
         config.text = config.text.replace(/>/g, "&gt;"); // escape HTML tag brackets
 
-        config.text = config.text.replace(openTags, function(matchStr, openB, contents, closeB) {
-            return "<" + contents + ">";
-        });
-        config.text = config.text.replace(closeTags, function(matchStr, openB, contents, closeB) {
-            return "<" + contents + ">";
-        });
+        config.text = config.text.replace(openTags, (_matchStr, _openB, contents) => "<" + contents + ">");
+        config.text = config.text.replace(closeTags, (_matchStr, _openB, contents) => "<" + contents + ">");
 
         config.text = config.text.replace(/\[/g, "&#91;"); // escape ['s that aren't apart of tags
-        config.text = config.text.replace(/\]/g, "&#93;"); // escape ['s that aren't apart of tags
-        config.text = config.text.replace(/</g, "["); // escape ['s that aren't apart of tags
-        config.text = config.text.replace(/>/g, "]"); // escape ['s that aren't apart of tags
+        config.text = config.text.replace(/\]/g, "&#93;"); // escape ]'s that aren't apart of tags
+        config.text = config.text.replace(/</g, "["); // replace <'s that aren't apart of tags
+        config.text = config.text.replace(/>/g, "]"); // replace >'s that aren't apart of tags
 
         // process tags that don't have their content parsed
-        while (config.text !== (config.text = config.text.replace(pbbRegExp2, function(matchStr, tagName, tagParams, tagContents) {
-                tagContents = tagContents.replace(/\[/g, "&#91;");
-                tagContents = tagContents.replace(/\]/g, "&#93;");
-                tagParams = tagParams || "";
-                tagContents = tagContents || "";
-                return "[" + tagName + tagParams + "]" + tagContents + "[/" + tagName + "]";
-            })));
+        while (config.text !== (config.text = config.text.replace(pbbRegExp2, (_matchStr, tagName, tagParams, tagContents) => {
+
+            // Newlines should not be converted to [br] in tags that don't have their content parsed
+            if (config.convertLineBreaksToBbcode) {
+                tagContents = tagContents.replaceAll('[br][/br]', '')
+            }
+
+            tagContents = tagContents.replace(/\[/g, "&#91;");
+            tagContents = tagContents.replace(/\]/g, "&#93;");
+            tagParams = tagParams || "";
+            tagContents = tagContents || "";
+
+            return "[" + tagName + tagParams + "]" + tagContents + "[/" + tagName + "]";
+
+        })));
 
         config.text = fixStarTag(config.text); // add in closing tags for the [*] tag
         config.text = addBbcodeLevels(config.text); // add in level metadata
@@ -567,6 +618,7 @@ var XBBCODE = (function() {
         errQueue = checkParentChildRestrictions("bbcode", config.text, -1, "", "", config.text);
 
         ret.html = parse(config);
+        ret.html = parseSingleTags(ret.html);
 
         if (ret.html.indexOf("[") !== -1 || ret.html.indexOf("]") !== -1) {
             errQueue.push("Some tags appear to be misaligned.");
@@ -575,17 +627,24 @@ var XBBCODE = (function() {
         if (config.removeMisalignedTags) {
             ret.html = ret.html.replace(/\[.*?\]/g, "");
         }
+
+        if (config.addInLineBreaks) {
+            ret.html = '<div style="white-space:pre-wrap;">' + ret.html + '</div>';
+        }
+
         if (config.wrapper) {
             ret.html = '<div id="word-break">' + ret.html + '</div>';
         }
 
         if (!config.escapeHtml) {
-            ret.html = ret.html.replace("&#91;", "["); // put ['s back in
-            ret.html = ret.html.replace("&#93;", "]"); // put ['s back in
+            ret.html = ret.html.replace(/&#91;/g, "["); // put ['s back in
+            ret.html = ret.html.replace(/&#93;/g, "]"); // put ]'s back in
         }
 
         ret.error = errQueue.length !== 0;
         ret.errorQueue = errQueue;
+
+        console.assert(!ret.error, ret.errorQueue)
 
         return ret;
     };
@@ -597,55 +656,38 @@ var XBBCODE = (function() {
 // END OF BBCODE TO HTML PARSER
 /////////////////////////////////////////////////////////////////////
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    init();
-});
+document.addEventListener("DOMContentLoaded", () => { init() });
 
 function init() {
     // textarea listener
-    document.getElementById("bbcode").addEventListener("input", function() {
-        let autoPreview = document.getElementById("auto-preview").checked;
-
-        if (autoPreview) {
-            loadParser();
-        }
-    });
+    document.getElementById("bbcode").addEventListener("input", runAutoPreview);
 
     // submit button listener
     document.getElementById("submit").addEventListener("click", loadParser);
 
     // bbcode buttons listeners
-    let buttons = document.querySelectorAll("#bbcode-buttons input.btn");
-    for (let button of buttons) {
+    let newButtons = document.querySelectorAll("#bbcode-buttons button.bbcode");
+    for (let button of newButtons) {
         button.addEventListener("click", function(event) {
             event.preventDefault();
-            insertBBCODE(event.srcElement.value);
+
+            let bbcode = event.target.closest("button").dataset.bbcode;
+            let bbcodeParam = event.target.closest("button").dataset.param;
+            if (bbcode) {
+                insertBBCODE(bbcode, bbcodeParam);
+            }
         });
     }
 
-    // size selection listener
-    document.getElementById("sizeSelection").addEventListener("change", function(event) {
-        document.getElementById("size").value = event.target.value;
-    });
-
-    // size sumbit listener
-    document.getElementById("sizeSubmit").addEventListener("click", function() {
-        insertBBCODE("size");
-    });
-
-    // color selection listener
-    document.getElementById("colorSelection").addEventListener("change", function(event) {
-        document.getElementById("color").value = event.target.value;
-    });
-
     // color wheel listener
-    document.getElementById("colorWheel").addEventListener("change", function() {
-        document.getElementById("color").value = event.target.value;
+    document.getElementById("colorWheel").addEventListener("change", (event) => {
+        console.log(event)
+        insertBBCODE("color", event.target.value);
     });
 
-    // color sumbit listener
-    document.getElementById("colorSubmit").addEventListener("click", function() {
-        insertBBCODE("color");
+    // remove new lines button
+    document.getElementById("removeNewLines").addEventListener("click", () => {
+        removeNewLinesFromSelection();
     });
 }
 
@@ -653,16 +695,31 @@ function loadParser() {
     let html = document.getElementById("word-break");
     html.parentNode.removeChild(html);
 
-    let result = runParser(document.getElementById("bbcode-textarea").value.replace(/(?:\r\n|\r|\n)/g, '[br][/br]'));
+    let result = runParser(document.getElementById("bbcode-textarea").value);
     document.getElementById("html-cell").insertAdjacentHTML('afterbegin', result.html);
 }
 
-function runParser(content) {
+function runParser(content, shouldWrap = true) {
     return XBBCODE.process({
         text: content,
+        convertLineBreaksToBbcode: true,
         removeMisalignedTags: false,
-        wrapper: true
+        wrapper: shouldWrap
     });
+}
+
+function removeNewLinesFromSelection() {
+    let textArea = document.getElementById("bbcode-textarea");
+    let start = textArea.selectionStart;
+    let end = textArea.selectionEnd;
+    let selection = textArea.value.substring(start, end);
+    let selectionWithoutNewlines = selection.replace(/\n/g, "")
+
+    insertAtCursor(textArea, selectionWithoutNewlines);
+    textArea.selectionStart = start;
+    textArea.selectionEnd = end + selectionWithoutNewlines.length;
+
+    runAutoPreview();
 }
 
 function insertAtCursor(input, textToInsert) {
@@ -683,28 +740,31 @@ function insertAtCursor(input, textToInsert) {
     }
 }
 
-function insertBBCODE(type) {
+function insertBBCODE(type, param) {
     let textArea = document.getElementById("bbcode-textarea");
     let start = textArea.selectionStart;
     let end = textArea.selectionEnd;
     let selection = textArea.value.substring(start, end);
-    let [tagOpen, innerText, tagClosed, selectionPos] = createBBCODE(type, selection);
+    let [tagOpen, innerText, tagClosed, selectionPos, cancelled] = createBBCODE(type, param, selection);
 
-    if (tagOpen.length > 0) {
+    if (!cancelled && tagOpen.length > 0) {
         insertAtCursor(textArea, tagOpen + innerText + tagClosed);
         textArea.selectionStart = start + selectionPos;
         textArea.selectionEnd = end + selectionPos;
 
-        let autoPreview = document.getElementById("auto-preview").checked;
-
-        if (autoPreview) {
-            loadParser();
-        }
+        runAutoPreview();
     }
 }
 
-function createBBCODE(type, innerText = "") {
-    let tagOpen, tagClose, selectionPos = 0;
+function runAutoPreview() {
+    let autoPreview = document.getElementById("auto-preview").checked;
+    if (autoPreview) {
+        loadParser();
+    }
+}
+
+function createBBCODE(type, param, innerText = "") {
+    let tagOpen, tagClose, selectionPos = 0, cancelled = false;
 
     switch (type.toLowerCase().trim()) {
         case "bold":
@@ -743,6 +803,36 @@ function createBBCODE(type, innerText = "") {
 
             break;
 
+        case "justify":
+            tagOpen = "[justify]";
+            tagClose = "[/justify]";
+
+            break;
+
+        case "subscript":
+            tagOpen = "[sub]";
+            tagClose = "[/sub]";
+
+            break;
+
+        case "superscript":
+            tagOpen = "[sup]";
+            tagClose = "[/sup]";
+
+            break;
+
+        case "pre":
+            tagOpen = "[pre]\n";
+            tagClose = "\n[/pre]";
+
+            break;
+
+        case "hr":
+            tagOpen = "[hr]";
+            tagClose = "";
+
+            break;
+
         case "code":
             tagOpen = "[code]";
             tagClose = "[/code]";
@@ -753,6 +843,7 @@ function createBBCODE(type, innerText = "") {
             let url = prompt("Insert URL", "");
 
             if (url == null) {
+                cancelled = true;
                 break;
             }
 
@@ -765,6 +856,7 @@ function createBBCODE(type, innerText = "") {
             let spoiler = prompt("Insert Spoiler name (optional)", "");
 
             if (spoiler == null) {
+                cancelled = true;
                 break;
             }
 
@@ -777,6 +869,7 @@ function createBBCODE(type, innerText = "") {
             let imgURL = prompt("Insert Image URL", "");
 
             if (imgURL == null) {
+                cancelled = true;
                 break;
             }
 
@@ -787,39 +880,15 @@ function createBBCODE(type, innerText = "") {
 
             break;
 
-        case "img left":
-            let imgURLLeft = prompt("Insert Image URL", "");
-
-            if (imgURLLeft == null) {
-                break;
-            }
-
-            innerText = imgURLLeft;
-            tagOpen = "[img align=left]";
-            tagClose = "[/img]";
-            selectionPos = innerText.length + tagClose.length;
-
-            break;
-
-        case "img right":
-            let imgURLRight = prompt("Insert Image URL", "");
-
-            if (imgURLRight == null) {
-                break;
-            }
-
-            innerText = imgURLRight;
-            tagOpen = "[img align=right]";
-            tagClose = "[/img]";
-            selectionPos = innerText.length + tagClose.length;
-
-            break;
-
         case "size":
-            let txtSize = document.getElementById("size").value;
-
-            tagOpen = "[size=" + String(txtSize) + "]";
+            tagOpen = "[size=" + param + "]";
             tagClose = "[/size]";
+
+            break;
+
+        case "font":
+            tagOpen = "[font='" + param + "']";
+            tagClose = "[/font]";
 
             break;
 
@@ -827,6 +896,7 @@ function createBBCODE(type, innerText = "") {
             let yt = prompt("Insert youtube video url", "");
 
             if (yt == null) {
+                cancelled = true;
                 break;
             }
 
@@ -838,13 +908,12 @@ function createBBCODE(type, innerText = "") {
             break;
 
         case "color":
-            color = document.getElementById("color").value;
-
-            if (color == null) {
+            if (param == null) {
+                cancelled = true;
                 break;
             }
 
-            tagOpen = "[color=" + String(color) + "]";
+            tagOpen = "[color=" + param + "]";
             tagClose = "[/color]";
 
             break;
@@ -853,6 +922,7 @@ function createBBCODE(type, innerText = "") {
             let quote = prompt("Insert quoted person name (optional)", "");
 
             if (quote == null) {
+                cancelled = true;
                 break;
             }
 
@@ -861,28 +931,68 @@ function createBBCODE(type, innerText = "") {
 
             break;
 
-        case "list":
+        case "list-ul":
+            let u_items = parseInt(prompt("How many list items?", ""));
+
+            if (isNaN(u_items)) {
+                cancelled = true;
+                break;
+            }
+
             tagOpen = "[list]\n[*]";
-            tagClose = "\n[/list]";
+            tagClose = `${"\n[*]".repeat(u_items - 1)}\n[/list]`;
 
             break;
 
-        case "ordered list":
+        case "list-ol":
+            let o_items = parseInt(prompt("How many list items?", ""));
+
+            if (isNaN(o_items)) {
+                cancelled = true;
+                break;
+            }
+
             tagOpen = "[list=1]\n[*]";
-            tagClose = "\n[/list]";
+            tagClose = `${"\n[*]".repeat(o_items - 1)}\n[/list]`;
 
             break;
 
-        case "list item":
-            tagOpen = "\n[*]";
-            tagClose = "";
+        case "table":
+            let rows = parseInt(prompt("How many table rows?", ""));
+
+            if (isNaN(rows)) {
+                cancelled = true;
+                break;
+            }
+
+            let columns = parseInt(prompt("How many table columns?", ""));
+
+            if (isNaN(columns)) {
+                cancelled = true;
+                break;
+            }
+
+            console.log(innerText)
+
+            let columns_header_string = `${"\n[th]title[/th]".repeat(columns)}`
+            let columns_string = `${("\n[td]" + innerText + "[/td]").repeat(columns)}`
+
+            tagOpen = `[table]\n[tr]${columns_header_string}\n[/tr]`;
+            tagClose = `${`\n[tr]${columns_string}\n[/tr]`.repeat(rows)}\n[/table]`;
+            innerText = "";
+            selectionPos += 10;
 
             break;
+
+        default:
+            return;
     }
 
-    selectionPos += tagOpen.length;
+    if (!cancelled) {
+        selectionPos += tagOpen?.length;
+    }
 
-    return [tagOpen, innerText, tagClose, selectionPos];
+    return [tagOpen, innerText, tagClose, selectionPos, cancelled];
 }
 
 function getVideoInfoFromUrl(url, info) {
@@ -890,14 +1000,19 @@ function getVideoInfoFromUrl(url, info) {
         return null;
     }
 
-    var urlVariables = url.split("?")[1].split("&"),
+    let urlVariables = url.split("?")[1].split("&"),
         varName;
 
-    for (var i = 0; i < urlVariables.length; i++) {
+    for (let i = 0; i < urlVariables.length; i++) {
         varName = urlVariables[i].split("=");
 
         if (varName[0] === info) {
             return varName[1] === undefined ? null : varName[1];
         }
     }
+}
+
+// for jest testing
+if (typeof exports !== 'undefined') {
+    module.exports = { runParser };
 }

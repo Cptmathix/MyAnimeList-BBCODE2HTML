@@ -1,0 +1,227 @@
+body {
+	font-family: Verdana, Arial, sans-serif;
+	line-height: 1.5em;
+}
+
+#header {
+	text-align: center;
+	height: 6vh;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	margin-bottom: 1vh;
+}
+
+#wrapper {
+	display: flex;
+	flex-direction: row;
+}
+
+#submit {
+	margin-left: 1%;
+}
+
+#auto-preview,
+#auto-preview-label {
+	font-size: 12px;
+	vertical-align: middle;
+}
+
+#bbcode {
+	width: 100%;
+}
+
+#bbcode-buttons {
+	margin-left: 1%;
+	background: #2E51A2;
+}
+
+#bbcode-buttons .btn,
+#bbcode-buttons button {
+	float: left;
+}
+
+#bbcode-buttons button {
+	width: 42px;
+	height: 42px;
+	background: #2E51A2;
+	border: none;
+	border-right: 1px dotted white;
+	color: #F6F6F6;
+	outline: none;
+}
+
+#bbcode-buttons button.group-end {
+	border-right: 1px solid white;
+}
+
+#bbcode-buttons button.bbcode:hover {
+	background: #394250;
+	color: #F6F6F6;
+}
+
+#bbcode-buttons:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+#bbcode-buttons .dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+#bbcode-buttons .dropdown-content {
+	display: none;
+	margin-top: 42px;
+	position: absolute;
+	background-color: #2E51A2;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+	white-space: nowrap;
+}
+
+#bbcode-buttons .dropdown-content button {
+	width: 100%;
+	padding: 9px 12px;
+	font-size: 14px;
+	text-decoration: none;
+	background-color: #2E51A2;
+	border: 0;
+	text-align: left;
+	display: block;
+}
+
+#bbcode-buttons .dropdown-content button.bbcode:hover {
+	background: #394250;
+}
+
+#bbcode-buttons .dropdown:hover .dropdown-content {
+	display: block;
+}
+
+#bbcode-buttons #removeNewLines {
+	float: right;
+	border: 0;
+}
+
+#bbcode-textarea {
+	width: 99%;
+	min-height: 82vh;
+	margin-left: 1%;
+	padding: 2px;
+	box-sizing: border-box;
+}
+
+#bbcode-textarea:focus {
+	border: #2E51A2 solid 2px;
+	outline: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+#html {
+	text-align: left;
+	margin-left: 0.5%;
+	margin-right: 1%;
+	width: 800px;
+	min-width: 800px;
+	max-height: 100%;
+	border: 1px solid #EBEBEB;
+	padding: 8px;
+	line-height: normal;
+}
+
+#html-cell>#word-break {
+	display: block;
+	word-break: break-word;
+	word-wrap: break-word;
+	font-size: 11px;
+	border-collapse: separate;
+	font-family: Verdana, Arial;
+}
+
+#html-cell>#word-break img {
+	max-width: 798px;
+	border: 0;
+	border-width: 0px;
+	border-style: initial;
+	border-color: initial;
+	border-image: initial;
+}
+
+#html-cell>#word-break img.img-a-l {
+	float: left;
+	padding-right: 8px;
+	padding-top: 4px;
+}
+
+#html-cell>#word-break img.img-a-r {
+	float: right;
+	padding-left: 8px;
+	padding-top: 4px;
+}
+
+#html-cell>#word-break a,
+#html-cell>#word-break a:visited {
+	color: #1d439b;
+	text-decoration: none;
+}
+
+#html-cell>#word-break .codetext {
+	background-color: rgb(255, 255, 255);
+	margin-bottom: 5px;
+	margin-left: 10px;
+	margin-top: 5px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: rgb(235, 235, 235);
+	border-image: initial;
+	padding: 5px;
+}
+
+#html-cell>#word-break .codetext pre {
+	margin: 0px;
+	white-space: pre-wrap;
+}
+
+#html-cell>#word-break span {
+	line-height: 1.5em;
+	margin: 0px;
+	padding: 0px;
+}
+
+#html-cell>#word-break iframe {
+	border-style: none;
+}
+
+#html-cell>#word-break .quotetext {
+	background-color: rgb(255, 255, 255);
+	margin-bottom: 5px;
+	margin-left: 10px;
+	margin-top: 5px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: rgb(235, 235, 235);
+	border-image: initial;
+	padding: 5px;
+}
+
+#html-cell>#word-break table.bbcode-table {
+	border-collapse: collapse;
+	margin: 5px 0;
+}
+
+#html-cell>#word-break table.bbcode-table td {
+	border: #e5e5e5 1px solid;
+	margin: 0;
+	padding: 5px;
+}
+
+#html-cell>#word-break table.bbcode-table th {
+	background-color: #f6f6f6;
+	border: #e5e5e5 1px solid;
+	margin: 0;
+	padding: 5px;
+}

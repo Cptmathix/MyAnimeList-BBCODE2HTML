@@ -1,9 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title>MyAnimeList - BBCODE2HTML</title>
-	<link rel="stylesheet" href="css/styles-v2.css">
+	<link rel="stylesheet" href="css/styles-v3.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+		  integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"
+			integrity="sha512-rpLlll167T5LJHwp0waJCh3ZRf7pO6IT1+LZOhAyP6phAirwchClbTZV3iqL3BMrVxIYRbzGTpli4rfxsCK6Vw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="js/bbcode2html.js"></script>
 </head>
 <body class="page-common profile">
@@ -14,68 +19,91 @@
 	<div id="wrapper">
 		<div id="bbcode">
 			<div id="bbcode-buttons">
-				<div>
-					<input type="button" value="Bold" class="btn">
-					<input type="button" value="Italic" class="btn">
-					<input type="button" value="Strike" class="btn">
-					<input type="button" value="Underline" class="btn">
-					<input type="button" value="Center" class="btn">
-					<input type="button" value="Right" class="btn">
-				</div>
-				<div>
-					<input type="button" value="Code" class="btn">
-					<input type="button" value="URL" class="btn">
-					<input type="button" value="Spoiler" class="btn">
-					<input type="button" value="IMG" class="btn">
-					<input type="button" value="IMG Left" class="btn">
-					<input type="button" value="IMG Right" class="btn">
-					<input type="button" value="Youtube" class="btn">
-					<input type="button" value="Quote" class="btn">
-					<input type="button" value="List" class="btn">
-					<input type="button" value="Ordered List" class="btn">
-					<input type="button" value="List Item" class="btn">
-				</div>
-				<div>
-					<label for="color">Color: </label>
-					<input type="text" name="color" id="color" value="black"><!--
-					--><input type="button" value="+" class="select-btn" id="colorSubmit">
-					<select name="colorSelection" id="colorSelection">
-						<option value="grey">Grey</option>
-						<option value="blue">Blue</option>
-						<option value="red">Red</option>
-						<option value="green">Green</option>
-						<option value="yellow">Yellow</option>
-						<option value="pink">Pink</option>
-						<option value="navy">Navy</option>
-						<option value="white">White</option>
-						<option value="black" selected>Black</option>
-						<option value="orange">Orange</option>
-						<option value="purple">Purple</option>
-					</select>					
-					<input type="color" name="colorWheel" id="colorWheel">
+				<button type="button" data-bbcode="bold" title="Bold" class="bbcode"><i class="fa fa-bold"></i></button>
+				<button type="button" data-bbcode="italic" title="Italic" class="bbcode"><i class="fa fa-italic"></i></button>
+				<button type="button" data-bbcode="underline" title="Underline" class="bbcode"><i class="fa fa-underline"></i></button>
+				<button type="button" data-bbcode="strike" title="Strikethrough" class="bbcode"><i class="fa fa-strikethrough"></i></button>
+				<button type="button" data-bbcode="subscript" title="Subscript" class="bbcode"><i class="fa fa-subscript"></i></button>
+				<button type="button" data-bbcode="superscript" title="Superscript" class="group-end bbcode"><i class="fa fa-superscript"></i></button>
 
-					<label for="size">Size: </label>
-					<input type="number" name="size" id="size" value="100"><!--
-					--><input type="button" value="+" class="select-btn" id="sizeSubmit">
-					<select name="sizeSelection" id="sizeSelection">
-						<option value="50">Small</option>
-						<option value="100" selected>Normal</option>
-						<option value="300">Medium</option>
-						<option value="600">Big</option>
-						<option value="900">Ultra Big</option>
-					</select>
+				<button type="button" data-bbcode="center" title="Center align text" class="bbcode"><i class="fa fa-align-center"></i></button>
+				<button type="button" data-bbcode="right" title="Right align text" class="bbcode"><i class="fa fa-align-right"></i></button>
+				<button type="button" data-bbcode="justify" title="Justify text" class="group-end bbcode"><i class="fa fa-align-justify"></i></button>
+
+				<button type="button" data-bbcode="list-ul" title="Unordered list" class="bbcode"><i class="fa fa-list-ul"></i></button>
+				<button type="button" data-bbcode="list-ol" title="Ordered list" class="bbcode"><i class="fa fa-list-ol"></i></button>
+				<button type="button" data-bbcode="table" title="Table" class="group-end bbcode"><i class="fa fa-table"></i></button>
+
+				<button type="button" data-bbcode="url" title="Url" class="bbcode"><i class="fa fa-link"></i></button>
+				<button type="button" data-bbcode="youtube" title="Youtube" class="bbcode"><i class="fa-brands fa-youtube"></i></button>
+				<button type="button" data-bbcode="spoiler" title="Spoiler" class="bbcode"><i class="fa-solid fa-eye-slash"></i></button>
+				<button type="button" data-bbcode="quote" title="Quote" class="bbcode"><i class="fa-solid fa-comment"></i></button>
+				<button type="button" data-bbcode="img" title="Image" class="group-end bbcode"><i class="fa-regular fa-image"></i></button>
+
+				<button type="button" data-bbcode="code" title="Code" class="bbcode"><i class="fa fa-code"></i></button>
+				<button type="button" data-bbcode="pre" title="Preformatted text" class="bbcode">Pre</button>
+				<button type="button" data-bbcode="hr" title="Horizontal rule" class="group-end bbcode"><b>__</b></button>
+
+				<div class="btn dropdown">
+					<button type="button" data-bbcode="size" title="Font size"><i class="fa fa-text-height"></i></button>
+					<div class="dropdown-content">
+						<button type="button" data-bbcode="size" data-param="50" class="bbcode">Small</button>
+						<button type="button" data-bbcode="size" data-param="100" class="bbcode">Normal</i></button>
+						<button type="button" data-bbcode="size" data-param="300" class="bbcode">Medium</button>
+						<button type="button" data-bbcode="size" data-param="600" class="bbcode">Big</button>
+						<button type="button" data-bbcode="size" data-param="900" class="bbcode">Ultra Big</button>
+					</div>
 				</div>
+
+				<div class="btn dropdown">
+					<button type="button" data-bbcode="color" title="Text color"><i class="fa-solid fa-palette"></i></button>
+					<div class="dropdown-content">
+						<button type="button" data-bbcode="color" data-param="grey" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: grey; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Grey</div></button>
+						<button type="button" data-bbcode="color" data-param="blue" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: blue; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Blue</div></button>
+						<button type="button" data-bbcode="color" data-param="red" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: red; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Red</div></button>
+						<button type="button" data-bbcode="color" data-param="green" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: green; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Green</div></button>
+						<button type="button" data-bbcode="color" data-param="yellow" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: yellow; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Yellow</div></button>
+						<button type="button" data-bbcode="color" data-param="pink" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: pink; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Pink</div></button>
+						<button type="button" data-bbcode="color" data-param="navy" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: navy; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Navy</div></button>
+						<button type="button" data-bbcode="color" data-param="white" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: white; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>White</div></button>
+						<button type="button" data-bbcode="color" data-param="black" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: black; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Black</div></button>
+						<button type="button" data-bbcode="color" data-param="orange" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: orange; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Orange</div></button>
+						<button type="button" data-bbcode="color" data-param="purple" class="bbcode"><div><div style="display: inline-block; vertical-align: middle; border: 1px solid black; background-color: purple; margin: 3px 8px 4px 4px; width: 13px; height: 13px;"></div>Purple</div></button>
+						<button type="button"><input type="color" id="colorWheel" style="display:block; width: 100%; height: 100%;"/></button>
+					</div>
+				</div>
+
+				<div class="btn dropdown">
+					<button type="button" data-bbcode="font" title="Font family" class="group-end"><i class="fa fa-font"></i></button>
+					<div class="dropdown-content">
+						<button type="button" data-bbcode="font" data-param="Arial,sans-serif" class="bbcode">Arial (sans-serif)</button>
+						<button type="button" data-bbcode="font" data-param="Verdana,sans-serif" class="bbcode">Verdana (sans-serif)</button>
+						<button type="button" data-bbcode="font" data-param="Roboto,sans-serif" class="bbcode">Roboto (sans-serif)</button>
+						<button type="button" data-bbcode="font" data-param="Tahoma,sans-serif" class="bbcode">Tahoma (sans-serif)</button>
+						<button type="button" data-bbcode="font" data-param="Trebuchet MS,sans-serif" class="bbcode">Trebuchet MS (sans-serif)</button>
+						<button type="button" data-bbcode="font" data-param="Times New Roman,serif" class="bbcode">Times New Roman (serif)</button>
+						<button type="button" data-bbcode="font" data-param="Georgia,serif" class="bbcode">Georgia (serif)</button>
+						<button type="button" data-bbcode="font" data-param="Garamond,serif" class="bbcode">Garamond (serif)</button>
+						<button type="button" data-bbcode="font" data-param="Courier New,monospace" class="bbcode">Courier New (monospace)</button>
+						<button type="button" data-bbcode="font" data-param="Brush Script MT,cursive" class="bbcode">Brush Script MT (cursive)</button>
+						<button type="button" data-bbcode="font" data-param="Copperplate,fantasy" class="bbcode">Copperplate (fantasy)</button>
+						<button type="button" data-bbcode="font" data-param="Papyrus,fantasy" class="bbcode">Papyrus (fantasy)</button>
+					</div>
+				</div>
+
+				<button type="button" id="removeNewLines" title="Remove newlines from selection"><i class="fa fa-compress"></i></button>
 			</div>
 
 			<textarea id="bbcode-textarea"></textarea>
 
 			<div>
 				<button id="submit">Submit</button>
-				<input type="checkbox" name="auto-preview" id="auto-preview"><label for="auto-preview" id="auto-preview-label">Auto Preview</label>
+				<input type="checkbox" checked name="auto-preview" id="auto-preview"><label for="auto-preview" id="auto-preview-label">Auto Preview</label>
+				<a style="font-size: 12px" href="https://myanimelist.net/info.php?go=bbcode" target="_blank" rel="noopener noreferrer">How to use BBCode?</a>
 				<div style="float: right; font-size: 12px">
 					<a href="https://github.com/Cptmathix/MyAnimeList-BBCODE2HTML">Github</a>
 					- Made By <a href="https://myanimelist.net/profile/Cpt_Mathix" style="text-decoration: none">Cpt_mathix</a>
-				</div>	
+				</div>
 			</div>
 		</div>
 		<div id="html">
@@ -87,8 +115,8 @@
 						</td>
 					</tr>
 				</tbody>
-			</table>	
-		</div>					
+			</table>
+		</div>
 	</div>
 </body>
 </html>

@@ -1,0 +1,29 @@
+{
+  "name": "myanimelist-bbcode2html",
+  "version": "1.0.0",
+  "description": "Preview MyAnimeList BBCODE, perfect for creating your about me or forum posts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cptmathix/MyAnimeList-BBCODE2HTML.git"
+  },
+  "author": "CptMathix",
+  "license": "GPL-2.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Cptmathix/MyAnimeList-BBCODE2HTML/issues"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint . --fix"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "homepage": "https://github.com/Cptmathix/MyAnimeList-BBCODE2HTML#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "eslint": "^8.33.0",
+    "jest": "^29.4.1",
+    "jest-environment-jsdom": "^29.4.1"
+  }
+}
