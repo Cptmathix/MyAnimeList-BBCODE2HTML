@@ -32,7 +32,7 @@ THE SOFTWARE.
     to add in your own tags.
 */
 
-let XBBCODE = (function() {
+let XBBCODE = (function () {
     "use strict";
 
     // -----------------------------------------------------------------------------
@@ -262,7 +262,7 @@ let XBBCODE = (function() {
         "table": {
             openTag: () => '<table class="bbcode-table"><tbody>',
             closeTag: () => '</tbody></table>',
-            restrictChildrenTo: ["tr","br"]
+            restrictChildrenTo: ["tr", "br"]
         },
         "td": {
             openTag: () => '<td>',
@@ -277,7 +277,7 @@ let XBBCODE = (function() {
         "tr": {
             openTag: () => '<tr>',
             closeTag: () => '</tr>',
-            restrictChildrenTo: ["td","th","br"],
+            restrictChildrenTo: ["td", "th", "br"],
             restrictParentsTo: ["table"]
         },
         "u": {
@@ -357,7 +357,7 @@ let XBBCODE = (function() {
         pbbRegExp2 = new RegExp("\\[(" + tagsNoParseList.join("|") + ")([ =][^\\]]*?)?\\]([\\s\\S]*?)\\[/\\1\\]", "gi");
 
         // create the regex for escaping ['s that aren't apart of tags
-        (function() {
+        (function () {
             let closeTagList = [];
             for (var ii = 0; ii < tagList.length; ii++) {
                 if (tagList[ii] !== "\\*") { // the * tag doesn't have an offical closing tag
@@ -415,7 +415,7 @@ let XBBCODE = (function() {
             }
         }
 
-        tagContents = tagContents.replace(bbRegExp, function(matchStr, bbcodeLevel, tagName, tagParams, tagContents) {
+        tagContents = tagContents.replace(bbRegExp, (matchStr, bbcodeLevel, tagName, tagParams, tagContents) => {
             errQueue = checkParentChildRestrictions(tagName.toLowerCase(), matchStr, bbcodeLevel, tagName, tagParams, tagContents, errQueue);
             return matchStr;
         });
@@ -428,14 +428,12 @@ let XBBCODE = (function() {
         from the HTML code tags at the end of the processing.
     */
     function updateTagDepths(tagContents) {
-        tagContents = tagContents.replace(/<([^>][^>]*?)>/gi, function(matchStr, subMatchStr) {
+        tagContents = tagContents.replace(/<([^>][^>]*?)>/gi, (_matchStr, subMatchStr) => {
             let bbCodeLevel = subMatchStr.match(/^bbcl=([0-9]+) /);
             if (bbCodeLevel === null) {
                 return "<bbcl=0 " + subMatchStr + ">";
             } else {
-                return "<" + subMatchStr.replace(/^(bbcl=)([0-9]+)/, function(matchStr, m1, m2) {
-                    return m1 + (parseInt(m2, 10) + 1);
-                }) + ">";
+                return "<" + subMatchStr.replace(/^(bbcl=)([0-9]+)/, (_matchStr, m1, m2) => m1 + (parseInt(m2, 10) + 1)) + ">";
             }
         });
         return tagContents;
@@ -500,8 +498,8 @@ let XBBCODE = (function() {
     }
 
     function parseSingleTags(text) {
-        for(var tag in tags) {
-            if(tags[tag].singleTag) {
+        for (var tag in tags) {
+            if (tags[tag].singleTag) {
                 text = text.replaceAll(`[${tag}]`, tags[tag].openTag());
             }
         }
@@ -548,7 +546,7 @@ let XBBCODE = (function() {
     }
 
     function addBbcodeLevels(text) {
-        while (text !== (text = text.replace(pbbRegExp, function(matchStr) {
+        while (text !== (text = text.replace(pbbRegExp, (matchStr) => {
             matchStr = matchStr.replace(/\[/g, "<");
             matchStr = matchStr.replace(/\]/g, ">");
             return updateTagDepths(matchStr);
@@ -561,12 +559,10 @@ let XBBCODE = (function() {
     // -----------------------------------------------------------------------------
 
     // API, Expose all available tags
-    me.tags = function() {
-        return tags;
-    };
+    me.tags = () => tags;
 
     // API
-    me.addTags = function(newtags) {
+    me.addTags = (newtags) => {
         let tag;
         for (tag in newtags) {
             tags[tag] = newtags[tag];
@@ -574,14 +570,13 @@ let XBBCODE = (function() {
         initTags();
     };
 
-    me.process = function(config) {
-        let ret = { html: "", error: false },
-            errQueue = [];
+    me.process = (config) => {
+        let ret = { html: "", error: false }, errQueue = [];
 
         config.text = securityFixes(config.text);
 
         if (config.convertLineBreaksToBbcode) {
-            config.text = config.text.replace(/(?:\r\n|\r|\n)/g, '[br][/br]\n')
+            config.text = config.text.replace(/(?:\r\n|\r|\n)/g, '[br][/br]\n');
         }
 
         config.text = config.text.replace(/</g, "&lt;"); // escape HTML tag brackets
@@ -595,12 +590,13 @@ let XBBCODE = (function() {
         config.text = config.text.replace(/</g, "["); // replace <'s that aren't apart of tags
         config.text = config.text.replace(/>/g, "]"); // replace >'s that aren't apart of tags
 
+
         // process tags that don't have their content parsed
         while (config.text !== (config.text = config.text.replace(pbbRegExp2, (_matchStr, tagName, tagParams, tagContents) => {
 
             // Newlines should not be converted to [br] in tags that don't have their content parsed
             if (config.convertLineBreaksToBbcode) {
-                tagContents = tagContents.replaceAll('[br][/br]', '')
+                tagContents = tagContents.replaceAll('[br][/br]', '');
             }
 
             tagContents = tagContents.replace(/\[/g, "&#91;");
@@ -644,7 +640,7 @@ let XBBCODE = (function() {
         ret.error = errQueue.length !== 0;
         ret.errorQueue = errQueue;
 
-        console.assert(!ret.error, ret.errorQueue)
+        console.assert(!ret.error, ret.errorQueue);
 
         return ret;
     };
@@ -668,7 +664,7 @@ function init() {
     // bbcode buttons listeners
     let newButtons = document.querySelectorAll("#bbcode-buttons button.bbcode");
     for (let button of newButtons) {
-        button.addEventListener("click", function(event) {
+        button.addEventListener("click", (event) => {
             event.preventDefault();
 
             let bbcode = event.target.closest("button").dataset.bbcode;
@@ -681,7 +677,6 @@ function init() {
 
     // color wheel listener
     document.getElementById("colorWheel").addEventListener("change", (event) => {
-        console.log(event)
         insertBBCODE("color", event.target.value);
     });
 
@@ -971,8 +966,6 @@ function createBBCODE(type, param, innerText = "") {
                 cancelled = true;
                 break;
             }
-
-            console.log(innerText)
 
             let columns_header_string = `${"\n[th]title[/th]".repeat(columns)}`
             let columns_string = `${("\n[td]" + innerText + "[/td]").repeat(columns)}`
