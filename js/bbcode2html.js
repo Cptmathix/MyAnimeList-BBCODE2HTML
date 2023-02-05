@@ -953,16 +953,16 @@ function createBBCODE(type, param, innerText = "") {
             break;
 
         case "table":
-            let rows = parseInt(prompt("How many table rows?", ""));
+            let columns = parseInt(prompt("How many table columns?", ""));
 
-            if (isNaN(rows)) {
+            if (isNaN(columns)) {
                 cancelled = true;
                 break;
             }
 
-            let columns = parseInt(prompt("How many table columns?", ""));
+            let rows = parseInt(prompt("How many table rows?", ""));
 
-            if (isNaN(columns)) {
+            if (isNaN(rows)) {
                 cancelled = true;
                 break;
             }
