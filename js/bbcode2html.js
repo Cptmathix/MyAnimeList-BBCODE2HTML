@@ -656,7 +656,7 @@ document.addEventListener("DOMContentLoaded", () => { init() });
 
 function init() {
     // textarea listener
-    document.getElementById("bbcode").addEventListener("input", runAutoPreview);
+    document.getElementById("bbcode").addEventListener("input", textareaUpdate);
 
     // submit button listener
     document.getElementById("submit").addEventListener("click", loadParser);
@@ -684,6 +684,32 @@ function init() {
     document.getElementById("removeNewLines").addEventListener("click", () => {
         removeNewLinesFromSelection();
     });
+}
+
+function textareaUpdate() {
+    runAutoPreview()
+
+    var text = document.querySelector("#bbcode-textarea").value;
+    var chars = text.match(/(?:[^\r\n]|\r(?!\n))/g);
+    var text_without_space = text.replace(/\s+/g, '');
+
+    // eslint-disable-next-line no-control-regex
+    var matches = text_without_space.match(/([^\x00-\x7F\u2013\u2014])+/gi);
+    var latin_only = (matches === null);
+
+    var words;
+    if (latin_only == false)
+    {
+        // non latin languages like chinese and russian - just count the spaces and be done with it
+        words = text.match(/\S+/g);
+    }
+    else {
+        // be smarter for latin languages
+        words = text.replace(/[;!:—/]/g, ' ').replace(/\.\s+/g, ' ').replace(/[^a-zA-Z\d\s&:,]/g, '').replace(/,([^0-9])/g, ' $1').match(/\S+/g);
+    }
+
+    document.querySelector('#characters').innerHTML = chars?.length ?? 0;
+    document.querySelector('#words').innerHTML = words?.length ?? 0;
 }
 
 function loadParser() {

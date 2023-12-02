@@ -99,10 +99,19 @@
 			<textarea id="bbcode-textarea"></textarea>
 
 			<div id="footer">
-				<button id="submit">Submit</button>
-				<input type="checkbox" checked name="auto-preview" id="auto-preview"><label for="auto-preview" id="auto-preview-label">Auto Preview</label>
-				<a style="font-size: 12px" href="https://myanimelist.net/info.php?go=bbcode" target="_blank" rel="noopener noreferrer">How to use BBCode?</a>
-				<div style="float: right; font-size: 12px">
+				<div style="white-space: nowrap;">
+					<button id="submit">Submit</button>
+					<input type="checkbox" checked name="auto-preview" id="auto-preview"><label for="auto-preview" id="auto-preview-label">Auto Preview</label>
+					<a href="https://myanimelist.net/info.php?go=bbcode" target="_blank" rel="noopener noreferrer">How to use BBCode?</a>
+				</div>
+				<div style="line-height: 0;">
+					<p style="display: inline-block;"> --- </p>
+					<p style="display: inline-block;">Characters: <span id="characters">0</span></p>
+					<p style="display: inline-block;"> / </p>
+					<p style="display: inline-block;">Words: <span id="words">0</span></p>
+					<p style="display: inline-block;"> --- </p>
+				</div>
+				<div>
 					<a href="https://github.com/Cptmathix/MyAnimeList-BBCODE2HTML">Github</a>
 					- Made By <a href="https://myanimelist.net/profile/Cpt_Mathix" style="text-decoration: none">Cpt_mathix</a>
 				</div>

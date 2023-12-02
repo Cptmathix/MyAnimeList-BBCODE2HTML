@@ -25,16 +25,15 @@ body {
 
 #footer {
 	height: 25px;
-	margin: 5px 0;
+	margin: 5px 0 5px 1%;
+	display: flex; 
+	justify-content: space-between;
+	font-size: 12px; 
 }
 
 #wrapper {
 	display: flex;
 	flex-direction: row;
-}
-
-#submit {
-	margin-left: 1%;
 }
 
 #auto-preview,
@@ -152,7 +151,7 @@ body {
 	text-align: left;
 	margin-left: 0.5%;
 	margin-right: 1%;
-	margin-bottom: 3vh;
+	margin-bottom: 2.7vh;
 	width: 800px;
 	min-width: 800px;
 	max-height: 100%;
