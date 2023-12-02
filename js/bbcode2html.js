@@ -692,6 +692,9 @@ function textareaUpdate() {
     var inputText = document.querySelector("#bbcode-textarea").value;
     var chars = inputText.match(/(?:[^\r\n]|\r(?!\n))/g);
     document.querySelector('#characters').innerHTML = chars?.length ?? 0;
+
+    var bytes = new TextEncoder().encode(inputText)
+    document.querySelector('#bytes').innerHTML = bytes?.length ?? 0;
 }
 
 function loadParser() {
